@@ -11,9 +11,10 @@ use wall::Wall;
 use crate::{qtree::QTree, HEIGHT, WIDTH};
 
 pub struct Map {
-    pub elements: Vec<Element>,
-    pub walls: Vec<Wall>,
-    pub qtree: QTree,
+    pub elements: Vec<Element>, // map elements (textures, loots, ...)
+    pub walls: Vec<Wall>,       // all walls
+    pub sqtree: QTree,          // static quadtree
+    pub dqtree: QTree,          // dynamic quadtree
 }
 
 impl Map {
@@ -23,14 +24,18 @@ impl Map {
         Map {
             elements: Vec::new(),
             walls: Vec::new(),
-            qtree: QTree::new(center, 4, w, h),
+            sqtree: QTree::new(center, 4, w, h),
+            dqtree: QTree::new(center, 4, w, h),
         }
     }
 
+    /// Draw the quadtrees (useful for debugging)
     pub fn draw_qt(&mut self, c: &Context, g: &mut G2d, transform: math::Matrix2d) {
-        self.qtree.draw(c, g, transform);
+        self.sqtree.draw(c, g, transform);
+        self.dqtree.draw(c, g, transform);
     }
 
+    /// Draw the map (walls and elements)
     pub fn draw(&mut self, c: &Context, g: &mut G2d, transform: math::Matrix2d) {
         for wall in self.walls.iter_mut() {
             wall.draw(c, g, transform);
