@@ -7,16 +7,16 @@ use super::{enemy::*, map::wall::Wall, map::*, player::*};
 use crate::{HEIGHT, PI, WIDTH};
 
 pub struct Game {
-    pub player: Player,
-    pub enemies: Vec<Enemy>,
-    pub map: Map,
-    pub key_pressed: Vec<Key>,
+    pub player: Player,        // you
+    pub enemies: Vec<Enemy>,   // bad guys
+    pub map: Map,              // the map
+    pub key_pressed: Vec<Key>, // all pressed keys
 
-    pub score: u32,
-    pub level: u32,
+    pub score: u32, // your score
+    pub level: u32, // current level
 
-    pub game_over: bool,
-    pub rng: rand::rngs::ThreadRng,
+    pub game_over: bool,            // game over?
+    pub rng: rand::rngs::ThreadRng, // random number generator
 }
 
 impl Game {
