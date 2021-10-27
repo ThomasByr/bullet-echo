@@ -51,12 +51,12 @@ impl Enemy {
             let ex = ax + dx * t;
             let ey = ay + dy * t;
 
-            let lec = f64::sqrt((cx - ex) * (cx - ex) + (cy - ey) * (cy - ey));
+            let lec2 = (cx - ex) * (cx - ex) + (cy - ey) * (cy - ey);
 
-            if lec >= r {
+            if lec2 >= r * r {
                 continue; // no intersection
-            } else if lec < r {
-                let dt = f64::sqrt(r * r - lec * lec);
+            } else if lec2 < r * r {
+                let dt = f64::sqrt(r * r - lec2);
 
                 // intersection points
                 let mut fx = (t - dt) * dx + ax;
