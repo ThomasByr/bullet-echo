@@ -32,17 +32,6 @@ impl Enemy {
         sight_cone: &Vec<Vector2D<f64>>,
         fov_radius: f64,
     ) {
-        ellipse(
-            [1.0, 0.0, 0.0, 1.0],
-            [
-                self.pos.x - self.radius,
-                self.pos.y - self.radius,
-                self.radius * 2.0,
-                self.radius * 2.0,
-            ],
-            transform,
-            g,
-        );
         let (cx, cy) = (self.pos.x, self.pos.y);
         let (ax, ay) = (ppos.x, ppos.y);
         let r = self.radius;
