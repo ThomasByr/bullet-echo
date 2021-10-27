@@ -1,4 +1,5 @@
 use piston_window::*;
+// use rand::Rng;
 use serde_json::{from_str, Value};
 use vector2d::Vector2D;
 
@@ -15,6 +16,7 @@ pub struct Game {
     pub level: u32,
 
     pub game_over: bool,
+    pub rng: rand::rngs::ThreadRng,
 }
 
 impl Game {
@@ -29,7 +31,13 @@ impl Game {
             level: 1,
 
             game_over: false,
+            rng: rand::thread_rng(),
         }
+    }
+
+    pub fn spawn_enemy(&mut self) {
+        let enemy = Enemy::new(300f64, -300f64);
+        self.enemies.push(enemy);
     }
 
     pub fn add_key_pressed(&mut self, key: Key) {
@@ -83,12 +91,23 @@ impl Game {
         let (cx, cy) = (WIDTH as f64 / 2.0, HEIGHT as f64 / 2.0);
         let (x0, y0) = (self.player.pos.x, self.player.pos.y);
 
-        let transform0 = c.transform.trans(cx, cy); // translate to center
-        let transform1 = transform0.rot_rad(-self.player.heading.angle() - PI / 2.0); // rotate
-        let transform2 = transform1.trans(-x0, -y0); // translate to player
+        let mut transform = c.transform.trans(cx, cy); // translate to center
+        transform = transform.rot_rad(-self.player.heading.angle() - PI / 2.0); // rotate
+        transform = transform.trans(-x0, -y0); // translate to player
 
-        self.map.draw(c, g, transform2); // draw map
-        self.player.draw(c, g, transform1); // draw player
+        self.map.draw(c, g, transform); // draw map
+        self.player.draw(c, g, transform); // draw player
+
+        for e in self.enemies.iter_mut() {
+            e.draw(
+                c,
+                g,
+                transform,
+                self.player.pos,
+                &self.player.sight_cone,
+                self.player.fov_radius,
+            );
+        }
 
         // self.map.draw_qt(c, g, transform);
     }

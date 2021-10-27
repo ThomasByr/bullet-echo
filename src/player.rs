@@ -51,14 +51,14 @@ impl Player {
             vel: Vector2D::new(0.0, 0.0),
             rot: 0.0,
             lin_vel: 1.0,
-            rot_vel: 2.0 * PI / 360.0,
+            rot_vel: PI / 360.0,
             radius: 10.0,
 
             heading: Vector2D::new(0.0, -1f64),
             accuracy: PI / 32.0,
             accuracy_rec: 5e-4,
-            min_acc: PI / 64.0,
-            max_acc: PI / 4.0,
+            min_acc: PI / 128.0,
+            max_acc: PI / 6.0,
             fov: PI / 4.0,
             fov_radius: 200.0,
 
@@ -156,10 +156,10 @@ impl Player {
             if d > self.fov_radius {
                 p = self.pos + dir * self.fov_radius;
             }
-            let px = p.x - self.pos.x;
-            let py = p.y - self.pos.y;
+            // let px = p.x - self.pos.x;
+            // let py = p.y - self.pos.y;
 
-            self.sight_cone.push(Vector2D::new(px, py));
+            self.sight_cone.push(Vector2D::new(p.x, p.y));
             self.color_cone.push(col);
             self.hit_cone.push(hit && d <= self.fov_radius);
         }
@@ -167,18 +167,14 @@ impl Player {
 
     /// Draws the player
     pub fn draw(&mut self, _c: &Context, g: &mut G2d, transform: math::Matrix2d) {
+        let (pox, poy) = (self.pos.x, self.pos.y);
         let heading = self.heading;
         let radius = self.radius;
 
         // draw player as a circle
         ellipse(
             [0.0, 1.0, 0.0, 1.0],
-            [
-                -self.radius,
-                -self.radius,
-                self.radius * 2.0,
-                self.radius * 2.0,
-            ],
+            [pox - radius, poy - radius, radius * 2.0, radius * 2.0],
             transform,
             g,
         );
@@ -189,7 +185,7 @@ impl Player {
             let col = self.color_cone[i];
             let hit = self.hit_cone[i];
 
-            line(col, 1.0, [0.0, 0.0, px, py], transform, g);
+            line(col, 1.0, [pox, poy, px, py], transform, g);
             if hit {
                 line([1.0; 4], 1.0, [px, py - 1.0, px, py], transform, g);
             }
@@ -199,7 +195,7 @@ impl Player {
         line(
             [1.0; 4],
             1.0,
-            [0.0, 0.0, heading.x * radius, heading.y * radius],
+            [pox, poy, pox + heading.x * radius, poy + heading.y * radius],
             transform,
             g,
         );

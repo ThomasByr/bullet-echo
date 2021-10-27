@@ -17,10 +17,12 @@ fn main() {
 
     let mut game = Game::new();
     game.load_map("data/smolmap.json"); // put path to map here
+    game.spawn_enemy();
 
     // main window
     let mut window: PistonWindow = WindowSettings::new("Hello Piston!", [WIDTH, HEIGHT])
         .exit_on_esc(true)
+        .srgb(true)
         .build()
         .unwrap_or_else(|e| panic!("Failed to build PistonWindow: {}", e));
 
