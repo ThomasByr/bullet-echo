@@ -13,5 +13,5 @@ serde_json = "*"
 serde = "*"
 rand = "*"
 
-vector2d = { git = "https://github.com/ThomasByr/rust-vector2d" }
+math_vector = { git = "https://github.com/ThomasByr/rust-math_vector" }
 ray-tracing = { path = "ray-tracing" }
