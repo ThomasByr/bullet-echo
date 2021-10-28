@@ -1,7 +1,7 @@
 use piston_window::*;
 // use rand::Rng;
+use math_vector::Vector;
 use serde_json::{from_str, Value};
-use vector2d::Vector2D;
 
 use super::{enemy::*, map::wall::Wall, map::*, player::*};
 use crate::{HEIGHT, PI, WIDTH};
@@ -61,8 +61,16 @@ impl Game {
         let walls = v["walls"].as_array().unwrap().to_vec();
 
         for w in walls {
-            let p1 = Vector2D::new(w["p1"][0].as_f64().unwrap(), w["p1"][1].as_f64().unwrap());
-            let p2 = Vector2D::new(w["p2"][0].as_f64().unwrap(), w["p2"][1].as_f64().unwrap());
+            let p1 = Vector::new(
+                w["p1"][0].as_f64().unwrap(),
+                w["p1"][1].as_f64().unwrap(),
+                0.0,
+            );
+            let p2 = Vector::new(
+                w["p2"][0].as_f64().unwrap(),
+                w["p2"][1].as_f64().unwrap(),
+                0.0,
+            );
             let wall = Wall::new(p1, p2);
             self.map.walls.push(wall);
         }
