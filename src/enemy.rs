@@ -1,8 +1,8 @@
+use math_vector::Vector;
 use piston_window::*;
-use vector2d::Vector2D;
 
 pub struct Enemy {
-    pub pos: Vector2D<f64>,
+    pub pos: Vector<f64>,
     pub radius: f64,
 }
 
@@ -17,7 +17,7 @@ fn sign(x: f64) -> f64 {
 impl Enemy {
     pub fn new(x: f64, y: f64) -> Enemy {
         Enemy {
-            pos: Vector2D::new(x, y),
+            pos: Vector::new(x, y, 0.0),
             radius: 10.0,
         }
     }
@@ -28,8 +28,8 @@ impl Enemy {
         _c: &Context,
         g: &mut G2d,
         transform: math::Matrix2d,
-        ppos: Vector2D<f64>,
-        sight_cone: &Vec<Vector2D<f64>>,
+        ppos: Vector<f64>,
+        sight_cone: &Vec<Vector<f64>>,
         fov_radius: f64,
     ) {
         let (cx, cy) = (self.pos.x, self.pos.y);
@@ -64,8 +64,8 @@ impl Enemy {
                 let mut gx = (t + dt) * dx + ax;
                 let mut gy = (t + dt) * dy + ay;
 
-                let f0 = Vector2D::new(fx, fy);
-                let g0 = Vector2D::new(gx, gy);
+                let f0 = Vector::new(fx, fy, 0.0);
+                let g0 = Vector::new(gx, gy, 0.0);
 
                 // behind the player
                 if ((f0 - *p2).length_squared() > f2) || ((g0 - *p2).length_squared() > f2) {
