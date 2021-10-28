@@ -26,6 +26,7 @@ cargo run #--release
 4.  some piston_window translations and rotations
 5.  drawing the enemies but only the parts that are visible
 6.  got rid of some square-roots
+7.  updated the vector library to something more 3d and general
 
 ## Bugs and TODOs
 
