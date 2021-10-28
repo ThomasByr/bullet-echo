@@ -1,4 +1,4 @@
-use vector2d::Vector2D;
+use math_vector::Vector;
 
 use crate::map::wall::Wall;
 use piston_window::*;
@@ -6,13 +6,13 @@ use std::fmt::Debug;
 
 #[derive(Clone, Copy)]
 pub struct Point {
-    pub pos: Vector2D<f64>,
+    pub pos: Vector<f64>,
     pub data: Option<Wall>,
 }
 
 #[derive(Debug)]
 pub struct Rect {
-    pub pos: Vector2D<f64>,
+    pub pos: Vector<f64>,
     pub width: f64,
     pub height: f64,
 }
