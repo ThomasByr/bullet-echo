@@ -1,6 +1,6 @@
 use piston_window::*;
 
-use vector2d::Vector2D;
+use math_vector::Vector;
 
 pub mod element;
 pub mod wall;
@@ -20,7 +20,7 @@ pub struct Map {
 impl Map {
     pub fn new() -> Map {
         let (w, h) = (WIDTH as f64 / 2.0, HEIGHT as f64 / 2.0);
-        let center = Vector2D::new(0.0, 0.0);
+        let center = Vector::default();
         Map {
             elements: Vec::new(),
             walls: Vec::new(),
