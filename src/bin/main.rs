@@ -1,9 +1,9 @@
 extern crate find_folder;
 extern crate fps_counter;
+extern crate math_vector;
 extern crate piston_window;
 extern crate serde;
 extern crate serde_json;
-extern crate vector2d;
 
 use bullet_echo::{game::Game, HEIGHT, WIDTH};
 use fps_counter::FPSCounter;
