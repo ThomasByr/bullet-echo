@@ -1,22 +1,22 @@
+use math_vector::Vector;
 use piston_window::*;
-use vector2d::Vector2D;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Wall {
-    pub p1: Vector2D<f64>,
-    pub p2: Vector2D<f64>,
+    pub p1: Vector<f64>,
+    pub p2: Vector<f64>,
 }
 
 impl Wall {
-    pub fn new(p1: Vector2D<f64>, p2: Vector2D<f64>) -> Wall {
+    pub fn new(p1: Vector<f64>, p2: Vector<f64>) -> Wall {
         Wall { p1, p2 }
     }
 
-    pub fn get_p1(&mut self) -> Vector2D<f64> {
+    pub fn get_p1(&mut self) -> Vector<f64> {
         self.p1
     }
 
-    pub fn get_p2(&mut self) -> Vector2D<f64> {
+    pub fn get_p2(&mut self) -> Vector<f64> {
         self.p2
     }
 
