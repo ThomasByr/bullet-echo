@@ -1,5 +1,5 @@
+use math_vector::Vector;
 use piston_window::*;
-use vector2d::Vector2D;
 
 use ray_tracing::{Ray as RayTracingRay, Wall as RayTracingWall};
 
@@ -13,28 +13,28 @@ pub struct Player {
     pub fire_rate: u64,   // fire rate of player (number of frames between shots)
     pub reload_time: u64, // reload time of player (number of frames between reloading)
 
-    pub pos: Vector2D<f64>, // position of player
-    pub vel: Vector2D<f64>, // velocity of player
-    pub rot: f64,           // rotation of player
-    pub lin_vel: f64,       // linear velocity of player
-    pub rot_vel: f64,       // angular velocity of player
-    pub radius: f64,        // size of player (for drawing)
+    pub pos: Vector<f64>, // position of player
+    pub vel: Vector<f64>, // velocity of player
+    pub rot: f64,         // rotation of player
+    pub lin_vel: f64,     // linear velocity of player
+    pub rot_vel: f64,     // angular velocity of player
+    pub radius: f64,      // size of player (for drawing)
 
-    pub heading: Vector2D<f64>, // heading of player
-    pub accuracy: f64,          // accuracy (cone of fire) of player (red)
-    pub accuracy_rec: f64,      // accuracy decrease / increase when moving
-    pub min_acc: f64,           // minimum accuracy
-    pub max_acc: f64,           // maximum accuracy
-    pub fov: f64,               // field of view (grey)
-    pub fov_radius: f64,        // max radius of field of view (grey)
+    pub heading: Vector<f64>, // heading of player
+    pub accuracy: f64,        // accuracy (cone of fire) of player (red)
+    pub accuracy_rec: f64,    // accuracy decrease / increase when moving
+    pub min_acc: f64,         // minimum accuracy
+    pub max_acc: f64,         // maximum accuracy
+    pub fov: f64,             // field of view (grey)
+    pub fov_radius: f64,      // max radius of field of view (grey)
 
-    pub health_bar_length: f64,        // length of health bar
-    pub health_bar_height: f64,        // height of health bar
-    pub health_bar_pos: Vector2D<f64>, // position of health bar (relative to center of player)
+    pub health_bar_length: f64,      // length of health bar
+    pub health_bar_height: f64,      // height of health bar
+    pub health_bar_pos: Vector<f64>, // position of health bar (relative to center of player)
 
-    pub sight_cone: Vec<Vector2D<f64>>, // points of sight cone
-    pub color_cone: Vec<[f32; 4]>,      // colors of rays in sight cone
-    pub hit_cone: Vec<bool>,            // whether ray hit wall in sight cone
+    pub sight_cone: Vec<Vector<f64>>, // points of sight cone
+    pub color_cone: Vec<[f32; 4]>,    // colors of rays in sight cone
+    pub hit_cone: Vec<bool>,          // whether ray hit wall in sight cone
 }
 
 impl Player {
@@ -47,14 +47,14 @@ impl Player {
             fire_rate: 30,
             reload_time: 600,
 
-            pos: Vector2D::new(0.0, 0.0),
-            vel: Vector2D::new(0.0, 0.0),
+            pos: Vector::default(),
+            vel: Vector::default(),
             rot: 0.0,
             lin_vel: 1.0,
             rot_vel: PI / 360.0,
             radius: 10.0,
 
-            heading: Vector2D::new(0.0, -1f64),
+            heading: Vector::new(0.0, -1f64, 0.0),
             accuracy: PI / 32.0,
             accuracy_rec: 5e-4,
             min_acc: PI / 128.0,
@@ -64,7 +64,7 @@ impl Player {
 
             health_bar_length: 30.0,
             health_bar_height: 3.0,
-            health_bar_pos: Vector2D::new(-15.0, -15.0),
+            health_bar_pos: Vector::new(-15.0, -15.0, 0.0),
 
             sight_cone: Vec::new(),
             color_cone: Vec::new(),
@@ -93,7 +93,7 @@ impl Player {
 
     pub fn update_player(&mut self) {
         self.pos += self.vel;
-        self.heading = self.heading.rotate(self.rot);
+        self.heading = self.heading.rotate_z(self.rot);
 
         if self.vel.length_squared() < 1e-8 && f64::abs(self.rot) < 1e-8 {
             self.increase_accuracy();
@@ -109,7 +109,7 @@ impl Player {
     }
 
     pub fn slide_player(&mut self, dir: f64) {
-        self.vel += self.heading.rotate(PI / 2.0).normalise() * dir * self.lin_vel;
+        self.vel += self.heading.rotate_z(PI / 2.0).normalise() * dir * self.lin_vel;
     }
 
     pub fn turn_player(&mut self, dir: f64) {
@@ -128,7 +128,7 @@ impl Player {
         for i in 0..RAYS {
             let if64 = i as f64;
             let angle = if64 * fov / RAYS as f64 - fov / 2.0;
-            let dir = heading.rotate(angle);
+            let dir = heading.rotate_z(angle);
 
             let col = if f64::abs(angle) < self.accuracy * 2.0 {
                 [0.3, 0.2, 0.2, 1.0]
@@ -159,7 +159,7 @@ impl Player {
             // let px = p.x - self.pos.x;
             // let py = p.y - self.pos.y;
 
-            self.sight_cone.push(Vector2D::new(p.x, p.y));
+            self.sight_cone.push(Vector::new(p.x, p.y, 0.0));
             self.color_cone.push(col);
             self.hit_cone.push(hit && d <= self.fov_radius);
         }
@@ -188,6 +188,7 @@ impl Player {
             line(col, 1.0, [pox, poy, px, py], transform, g);
             if hit {
                 line([1.0; 4], 1.0, [px, py - 1.0, px, py], transform, g);
+                line([1.0; 4], 1.0, [px - 1.0, py, px, py], transform, g);
             }
         }
 
