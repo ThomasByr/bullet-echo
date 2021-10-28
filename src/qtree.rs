@@ -1,4 +1,4 @@
-use vector2d::Vector2D;
+use math_vector::Vector;
 
 pub mod bounds;
 use bounds::*;
@@ -10,7 +10,7 @@ pub struct QTree {
     pub southeast: Option<Box<QTree>>,
     pub southwest: Option<Box<QTree>>,
 
-    pub center: Vector2D<f64>,
+    pub center: Vector<f64>,
     pub size: usize,
     pub points: Vec<Point>,
 
@@ -19,7 +19,7 @@ pub struct QTree {
 }
 
 impl QTree {
-    pub fn new(center: Vector2D<f64>, size: usize, width: f64, height: f64) -> QTree {
+    pub fn new(center: Vector<f64>, size: usize, width: f64, height: f64) -> QTree {
         QTree {
             northeast: None,
             northwest: None,
@@ -55,25 +55,25 @@ impl QTree {
         let h = self.boundary.height / 2.0;
 
         self.northeast = Some(Box::new(QTree::new(
-            Vector2D::new(x - w, y - h),
+            Vector::new(x - w, y - h, 0.0),
             self.size,
             w,
             h,
         )));
         self.northwest = Some(Box::new(QTree::new(
-            Vector2D::new(x + w, y - h),
+            Vector::new(x + w, y - h, 0.0),
             self.size,
             w,
             h,
         )));
         self.southeast = Some(Box::new(QTree::new(
-            Vector2D::new(x - w, y + h),
+            Vector::new(x - w, y + h, 0.0),
             self.size,
             w,
             h,
         )));
         self.southwest = Some(Box::new(QTree::new(
-            Vector2D::new(x + w, y + h),
+            Vector::new(x + w, y + h, 0.0),
             self.size,
             w,
             h,
