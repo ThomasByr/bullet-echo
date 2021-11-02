@@ -20,7 +20,7 @@ fn main() {
     game.spawn_enemy();
 
     // main window
-    let mut window: PistonWindow = WindowSettings::new("Hello Piston!", [WIDTH, HEIGHT])
+    let mut window: PistonWindow = WindowSettings::new("Bullet Echo", [WIDTH, HEIGHT])
         .exit_on_esc(true)
         .srgb(true)
         .build()
