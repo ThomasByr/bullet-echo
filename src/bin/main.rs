@@ -31,10 +31,10 @@ fn main() {
         .unwrap_or_else(|e| panic!("Failed to load font: {}", e));
 
     // main loop
+    window.set_ups(60);
+    window.set_max_fps(60);
     window.set_position([100, 10]);
     while let Some(event) = window.next() {
-        let fps = fps_counter.tick();
-
         if let Some(Button::Keyboard(key)) = event.press_args() {
             game.add_key_pressed(key);
         } else if let Some(Button::Keyboard(key)) = event.release_args() {
@@ -44,6 +44,7 @@ fn main() {
         game.update(); // big stuff happening here
 
         window.draw_2d(&event, |c, g, device| {
+            let fps = fps_counter.tick();
             let transform = c.transform.trans(10., 20.); // transform for text
 
             clear([0.1; 4], g); // background
