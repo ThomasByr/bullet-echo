@@ -8,13 +8,13 @@
 
 Compile with
 
-```bash
+```ps1
 cargo build #--release
 ```
 
 Run with
 
-```bash
+```ps1
 cargo run #--release
 ```
 
